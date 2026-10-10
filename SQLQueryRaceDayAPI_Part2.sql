@@ -1,15 +1,15 @@
-﻿CREATE DATABASE RaceDay_Part_2_Restful_API; --create the database 
+﻿CREATE DATABASE RaceDay_Part_2_Restful_API; --Create the database 
 
-USE RaceDay_Part_2_Restful_API; --then we use the database 
+USE RaceDay_Part_2_Restful_API; --...then we use the database and terminate
 
 
---here we have the users table 
+--here we have the Users table 
 CREATE TABLE dbo.[Users] (
-user_id INT IDENTITY(1,1) PRIMARY KEY, --unique identifier 
+user_id INT IDENTITY(1,1) PRIMARY KEY, -- primary key is a unique identifier 
 first_name NVARCHAR(50) NOT NULL, 
 last_name NVARCHAR(50) NOT NULL, 
 email NVARCHAR (100) NOT NULL UNIQUE, 
-user_password NVARCHAR(255) NOT NULL, 
+user_password NVARCHAR(255) NOT NULL, --don't forget to hash it 
 [user_roler] NVARCHAR(20) NOT NULL CHECK ([user_role] IN ('organiser', 'participant')), --organiser can be a participant but a participant can't be an organiser.
 created_at DATETIME DEFAULT GETDATE(), 
 updated_at DATETIME DEFAULT GETDATE()
