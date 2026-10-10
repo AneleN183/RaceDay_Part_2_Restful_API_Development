@@ -9,7 +9,7 @@ user_id INT IDENTITY(1,1) PRIMARY KEY, -- primary key is a unique identifier
 first_name NVARCHAR(50) NOT NULL, 
 last_name NVARCHAR(50) NOT NULL, 
 email NVARCHAR (100) NOT NULL UNIQUE, 
-user_password NVARCHAR(255) NOT NULL, --don't forget to hash it 
+user_password NVARCHAR(255) NOT NULL, --don't forget to hash it, so you can't see the users passwords
 [user_roler] NVARCHAR(20) NOT NULL CHECK ([user_role] IN ('organiser', 'participant')), --organiser can be a participant but a participant can't be an organiser.
 created_at DATETIME DEFAULT GETDATE(), 
 updated_at DATETIME DEFAULT GETDATE()
