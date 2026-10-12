@@ -13,9 +13,9 @@ namespace RaceDay_Part_2_Restful_API_Development.Controllers
         private readonly RaceDayDatabase _context;
 
         public eventCategoriesController(RaceDayDatabase context)
-        {
+        {//start of constructor, this initializes the database context context through a dependency injection
             _context = context;
-        }
+        }//end of constructor
 
        
 
