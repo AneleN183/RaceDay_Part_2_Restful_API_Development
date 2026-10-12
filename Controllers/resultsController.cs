@@ -14,68 +14,68 @@ namespace RaceDay_Part_2_Restful_API_Development.Controllers
         private readonly RaceDayDatabase _context;
 
         public resultsController(RaceDayDatabase context)
-        {
+        {//start of constructor, this initializes the database context context through a dependency injection
             _context = context;
-        }
+        }//end of constructor 
         
 
         [HttpPost("api/events/{eventId}/results")]
         public async Task<ActionResult> UploadResults(int eventId, [FromBody] BulkResultsRequest request)
-        {
+        {//start of POST method 
             // TODO: Replace with session user ID once auth is set up
             int currentUserId = 1;
 
             var eventItem = await _context.Events.FindAsync(eventId);
             if (eventItem == null)
-            {
+            {//start of if statement 
                 return NotFound(new { message = $"Event with ID {eventId} not found." });
-            }
+            }//end of if statement 
 
             // Ownership check
             if (eventItem.user_id != currentUserId)
-            {
+            {//start of if statement 
                 return Forbid();
-            }
+            }//end of if statement 
 
             if (request?.Results == null || request.Results.Count == 0)
-            {
+            {//start of if statement 
                 return BadRequest(new { message = "No results provided." });
-            }
+            }//end of if statement
 
             int savedCount = 0;
 
             foreach (var incoming in request.Results)
-            {
+            {//start of foreach statement 
                 // 1. Make sure the registration exists and belongs to this event
                 var registration = await _context.Registration
                     .FirstOrDefaultAsync(r => r.registration_id == incoming.registration_id);
 
                 if (registration == null)
-                {
+                {//start of if statment 
                     continue; // skip invalid entries
-                }
+                }//end of if statement 
 
                 // Verify the registration is for this event
                 var eventCategory = await _context.EventCategories
                     .FirstOrDefaultAsync(ec => ec.event_category_id == registration.event_category_id);
 
                 if (eventCategory == null || eventCategory.event_id != eventId)
-                {
+                {//start of if statment 
                     continue; // registration doesn't belong to this event
-                }
+                }//end of if statement 
 
                 // 2. Upsert: if a result already exists, update it; otherwise insert
                 var existingResult = await _context.Results
                     .FirstOrDefaultAsync(res => res.registration_id == incoming.registration_id);
 
                 if (existingResult != null)
-                {
+                {//start of if statement 
                   
                     existingResult.status = incoming.status ?? "OK";
                     existingResult.updated_at = DateTime.Now;
-                }
+                }//end of if statement 
                 else
-                {
+                {//start of else statement 
                     var newResult = new Models.Results
                     {
                         registration_id = incoming.registration_id,
@@ -88,30 +88,30 @@ namespace RaceDay_Part_2_Restful_API_Development.Controllers
                     };
 
                     _context.Results.Add(newResult);
-                }
+                }//end of else statement 
 
                 savedCount++;
-            }
+            }//end of foreach 
 
             await _context.SaveChangesAsync();
 
             return StatusCode(201, new
-            {
+            {//start of return 
                 message = "Results uploaded successfully.",
                 count = savedCount
-            });
-        }
+            });//end of return 
+        }//end of POST method 
         [HttpGet("api/events/{eventId}/results")]
         public async Task<ActionResult> GetEventResults(
             int eventId,
             [FromQuery] int? category,
             [FromQuery] int? top)
-        {
+        {//start of GET method 
             var eventItem = await _context.Events.FindAsync(eventId);
             if (eventItem == null)
-            {
+            {//start of if 
                 return NotFound(new { message = $"Event with ID {eventId} not found." });
-            }
+            }//end of if 
 
             // Build the base query: Results → Registration → EventCategories → filter by event
             var query =
@@ -135,9 +135,9 @@ namespace RaceDay_Part_2_Restful_API_Development.Controllers
 
             // Optional filter by category
             if (category.HasValue)
-            {
+            {//start of if statement 
                 query = query.Where(x => x.category_id == category.Value);
-            }
+            }//end of if 
 
             // Order by overall rank (nulls last)
             var results = await query
@@ -147,23 +147,23 @@ namespace RaceDay_Part_2_Restful_API_Development.Controllers
 
             // Optional top-N
             if (top.HasValue)
-            {
+            {//start of if 
                 results = results.Take(top.Value).ToList();
-            }
+            }//end of if  
 
             return Ok(results);
-        }
+        }//end of GET method 
         [HttpGet("api/registrations/{registrationId}/results")]
         public async Task<ActionResult> GetResultByRegistration(int registrationId)
-        {
-            // TODO: Replace with session user ID once auth is set up
+        {//start of GET method 
+            //Replace with session user ID once auth is set up
             int currentUserId = 1;
 
             var registration = await _context.Registration.FindAsync(registrationId);
             if (registration == null)
-            {
+            {//start of if 
                 return NotFound(new { message = $"Registration with ID {registrationId} not found." });
-            }
+            }//end of if 
 
             // Ownership check
             var eventCategory = await _context.EventCategories
@@ -176,38 +176,38 @@ namespace RaceDay_Part_2_Restful_API_Development.Controllers
             bool isOrganiser = eventItem != null && eventItem.user_id == currentUserId;
 
             if (!isOwner && !isOrganiser)
-            {
+            {//start of if 
                 return Forbid();
-            }
+            }//end of if 
 
             var result = await _context.Results
                 .FirstOrDefaultAsync(res => res.registration_id == registrationId);
 
             if (result == null)
-            {
+            {//start of if 
                 return NotFound(new { message = "No result found for this registration." });
-            }
+            }//end of if 
 
             return Ok(new
-            {
+            {//start of return 
                 result_id = result.result_id,
                 finish_time = result.finish_time,
                 overall_rank = result.overall_rank,
                 category_rank = result.category_rank,
                 status = result.status
-            });
-        }
+            });//end of return
+        }//end of GET method 
         [HttpPut("api/results/{resultId}")]
         public async Task<IActionResult> UpdateResult(int resultId, [FromBody] Models.Results updatedResult)
-        {
-            // TODO: Replace with session user ID once auth is set up
+        {//start of PUT method 
+            //Replace with session user ID once auth is set up
             int currentUserId = 1;
 
             var existingResult = await _context.Results.FindAsync(resultId);
             if (existingResult == null)
-            {
+            {//start of if 
                 return NotFound(new { message = $"Result with ID {resultId} not found." });
-            }
+            }//end of if 
 
             // Ownership check via registration → event
             var registration = await _context.Registration
@@ -220,9 +220,9 @@ namespace RaceDay_Part_2_Restful_API_Development.Controllers
                 : null;
 
             if (eventItem == null || eventItem.user_id != currentUserId)
-            {
+            {//start of if 
                 return Forbid();
-            }
+            }//end of if 
 
             // Only update allowed fields
             existingResult.finish_time = updatedResult.finish_time;
@@ -232,19 +232,19 @@ namespace RaceDay_Part_2_Restful_API_Development.Controllers
             await _context.SaveChangesAsync();
 
             return Ok(new { message = "Result updated successfully." });
-        }
-    }
+        }//end of PUT 
+    }//end of class 
     public class BulkResultsRequest
-    {
+    {//start of class BulkResultsRequest 
         public List<BulkResultItem> Results { get; set; } = new();
-    }
+    }//end of class BulkResultsRequest 
 
     public class BulkResultItem
-    {
+    {//start of class BulkResultItem
         public int registration_id { get; set; }
         public TimeSpan? finish_time { get; set; }
         public int? overall_rank { get; set; }
         public int? category_rank { get; set; }
         public string? status { get; set; }
-    }
+    }//end of class BulkResultItem
 }//end of class 
