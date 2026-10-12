@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RaceDay_Part_2_Restful_API_Development.Models;
 using RaceDay_Part_2_Restful_API_Development.Data; 
+//imports 
 
 namespace RaceDay_Part_2_Restful_API_Development.Controllers
 {//start of namespace 
@@ -14,58 +15,58 @@ namespace RaceDay_Part_2_Restful_API_Development.Controllers
         private readonly RaceDayDatabase _context;
 
         public usersController(RaceDayDatabase context)
-        {
+        {//start of constructor, this initializes the database context context through a dependency injection
             _context = context;
-        }
+        }//end of constructor 
         
         [HttpGet("me")]
         public async Task<ActionResult<Users>> GetMyProfile()
-        {
-            // TODO: Replace with actual session user ID once auth is set up
+        {//start of GET method 
+            //Replace with actual session user ID once auth is set up
             int currentUserId = 1;
 
             var user = await _context.Users.FindAsync(currentUserId);
 
             if (user == null)
-            {
+            {//start of if 
                 return NotFound(new { message = "Current user not found." });
-            }
+            }//end of if 
 
             user.user_password = "";
             return Ok(user);
-        }
+        }//end of GET method 
         [HttpPut("me")]
         public async Task<IActionResult> UpdateMyProfile([FromBody] Users updatedUser)
-        {
-            // TODO: Replace with actual session user ID once auth is set up
+        {//start of PUT method 
+           
             int currentUserId = 1;
 
             var user = await _context.Users.FindAsync(currentUserId);
 
             if (user == null)
-            {
+            {//start of if 
                 return NotFound(new { message = "Current user not found." });
-            }
+            }//end of if 
 
             user.first_name = updatedUser.first_name;
             user.last_name = updatedUser.last_name;
             user.email = updatedUser.email;
 
             if (!string.IsNullOrEmpty(updatedUser.user_password))
-            {
-                // NOTE: Hash this once auth is implemented
+            {//start of if 
+                // Remember!!!! Hash this once auth is implemented
                 user.user_password = updatedUser.user_password;
-            }
+            }//end of if 
 
             user.updated_at = DateTime.Now;
 
             await _context.SaveChangesAsync();
 
             return Ok(new { message = "Profile updated successfully.", user });
-        }
+        }//end of PUT method 
         [HttpGet("me/registrations")]
         public async Task<ActionResult> GetMyRegistrations()
-        {
+        {//start of GET 
             // TODO: Replace with actual session user ID once auth is set up
             int currentUserId = 1;
 
@@ -81,11 +82,11 @@ namespace RaceDay_Part_2_Restful_API_Development.Controllers
                 .ToListAsync();
 
             return Ok(registrations);
-        }
+        }//end of GET 
         [HttpGet("me/results")]
         public async Task<ActionResult> GetMyResults()
-        {
-            // TODO: Replace with actual session user ID once auth is set up
+        {//start of GET method to check my results 
+           
             int currentUserId = 1;
 
             var results = await _context.Results
@@ -106,7 +107,7 @@ namespace RaceDay_Part_2_Restful_API_Development.Controllers
 
             return Ok(results);
         }
-
+        //end of GET method 
 
     }//end of class
 }//end of namespace 
