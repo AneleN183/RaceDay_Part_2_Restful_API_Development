@@ -63,7 +63,7 @@ These are the results for first unit test in categoriesControllerTests.cs
   ✨Explanation✨: It tests that the endpoint correctly returns a 404 Not Found when the requested category does not exist
   <img width="1918" height="1006" alt="image" src="https://github.com/user-attachments/assets/92e4ad93-1b8c-49be-b6bc-8edc44976762" />
 
-
+15 October 2026, Thursday, 09:50AM --It seems as though there is an error with the unit testing in the categoriesControllerTests.cs class, please standby.
 
 
 
