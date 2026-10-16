@@ -65,6 +65,7 @@ These are the results for first unit test in categoriesControllerTests.cs
 
 15 October 2026, Thursday, 09:50AM --It seems as though there is an error with the unit testing in the categoriesControllerTests.cs class, please standby.
 
+16 October 2026, Thursday, 06:10PM -- Error still not fixed, I apologize in advance for that, unfortunately code can not run properly. 
 
 
 
