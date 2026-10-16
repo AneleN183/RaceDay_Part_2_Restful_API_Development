@@ -67,6 +67,9 @@ These are the results for first unit test in categoriesControllerTests.cs
 
 16 October 2026, Thursday, 06:10PM -- Error still not fixed, I apologize in advance for that, unfortunately code can not run properly. 
 
+YouTube video link- 
+https://youtu.be/cxLLwM8jtSU?si=ugvPvbzaCeQAMsjj
+
 
 
 
